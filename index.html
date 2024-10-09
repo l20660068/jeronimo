@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piedra, Papel o Tijeras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #e3ffff, #ff6565, #30c7ec); /* Fondo degradado */
+            margin: 0;
+            overflow: hidden; /* Evitar scroll por las formas que sobresalen */
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1; /* Asegura que las formas estén detrás */
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+
+        .choice {
+            cursor: pointer;
+            padding: 20px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 50%;
+            font-size: 18px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .choice:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            font-size: 24px;
+            color: #555;
+            margin-top: 20px;
+        }
+
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .score {
+            background-color: #eee;
+            padding: 30px;
+            border-radius: 8px;
+            width: 100px;
+        }
+
+        /* Agregamos formas geométricas decorativas al fondo */
+        body::before,
+        body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            z-index: 0; /* Detrás del contenedor */
+        }
+
+        body::before {
+            width: 400px;
+            height: 400px;
+            top: -150px;
+            left: -150px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+        }
+
+        body::after {
+            width: 300px;
+            height: 300px;
+            bottom: -100px;
+            right: -100px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+        }
+
+        .highlight {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Piedra, Papel o Tijeras</h1>
+    <div class="choices">
+        <div class="choice" data-choice="piedra">🪨 Piedra</div>
+        <div class="choice" data-choice="papel">📄 Papel</div>
+        <div class="choice" data-choice="tijeras">✂️ Tijeras</div>
+    </div>
+    <div id="result"></div>
+    <div class="scoreboard">
+        <div class="score">Tú: <span id="playerScore">0</span></div>
+        <div class="score">Computadora: <span id="computerScore">0</span></div>
+    </div>
+</div>
+
+<script>
+    const choices = document.querySelectorAll('.choice');
+    const result = document.getElementById('result');
+    const playerScoreElem = document.getElementById('playerScore');
+    const computerScoreElem = document.getElementById('computerScore');
+    let playerScore = 0;
+    let computerScore = 0;
+
+    const options = ['piedra', 'papel', 'tijeras'];
+
+    choices.forEach(choice => {
+        choice.addEventListener('click', () => {
+            const playerChoice = choice.getAttribute('data-choice');
+            const computerChoice = options[Math.floor(Math.random() * options.length)];
+            playRound(playerChoice, computerChoice);
+        });
+    });
+
+    function playRound(playerChoice, computerChoice) {
+        if (playerChoice === computerChoice) {
+            result.textContent = `Empate. Ambos eligieron ${playerChoice}.`;
+            result.style.color = "#6c757d";
+        } else if (
+            (playerChoice === 'piedra' && computerChoice === 'tijeras') ||
+            (playerChoice === 'papel' && computerChoice === 'piedra') ||
+            (playerChoice === 'tijeras' && computerChoice === 'papel')
+        ) {
+            result.textContent = `Ganaste! ${playerChoice} vence a ${computerChoice}.`;
+            result.style.color = "#28a745";
+            playerScore++;
+            playerScoreElem.textContent = playerScore;
+        } else {
+            result.textContent = `Perdiste! ${computerChoice} vence a ${playerChoice}.`;
+            result.style.color = "#dc3545";
+            computerScore++;
+            computerScoreElem.textContent = computerScore;
+        }
+    }
+</script>
+
+</body>
+</html>
